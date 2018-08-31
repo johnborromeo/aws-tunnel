@@ -1,0 +1,15 @@
+tunnel1:
+  tunnel_id: 10
+  tunnel_ip: 169.254.0.0/30
+  peer_ip: 1.1.1.1
+  tunnel_key: Testk3y1234!
+  peer_as: 65123
+  peer_zone: usecase1
+
+tunnel2:
+  tunnel_id: 20
+  tunnel_ip: 169.254.1.0/30
+  peer_ip: 1.2.1.1
+  tunnel_key: Testk3y1234!
+  peer_as: 65234
+  peer_zone: usecase1

@@ -1,0 +1,57 @@
+configure
+
+#####################################PRIMARY TUNNEL######################################
+
+
+#ZONE-BASED POLICY - AWS TO SFDC
+delete vsys vsys2 rulebase security rules {{tunnel1.peer_zone}}-sfdc
+
+#ZONE-BASED POLICY - SFDC TO AWS
+delete vsys vsys2 rulebase security rules sfdc-{{tunnel1.peer_zone}}
+
+
+#BGP NEIGHBOR
+delete network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-{{tunnel1.peer_zone}}-tun1
+
+#IPSEC
+delete network tunnel ipsec ipsec-{{tunnel1.peer_zone}}-tun1
+
+#TUNNEL INTERFACE CONFIG
+
+delete vsys vsys2 import network interface tunnel.{{tunnel1.tunnel_id}}
+delete vsys vsys2 zone z-{{tunnel1.peer_zone}} network layer3 tunnel.{{tunnel1.tunnel_id}}
+delete network virtual-router aws-test-vr interface tunnel.{{tunnel1.tunnel_id}}
+delete network interface tunnel units tunnel.{{tunnel1.tunnel_id}}
+
+#IKE GATEWAY CONFIG
+delete network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1
+
+
+#####################################SECONDARY TUNNEL######################################
+
+
+ZONE-BASED POLICY
+
+#AWS TO SFDC
+delete vsys vsys2 rulebase security rules {{tunnel2.peer_zone}}-sfdc
+
+#SFDC TO AWS
+delete vsys vsys2 rulebase security rules sfdc-{{tunnel2.peer_zone}}
+
+
+#BGP NEIGHBOR
+delete network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-{{tunnel2.peer_zone}}-tun2
+
+#IPSEC
+delete network tunnel ipsec ipsec-{{tunnel2.peer_zone}}-tun2
+
+#TUNNEL INTERFACE CONFIG
+delete vsys vsys2 import network interface tunnel.{{tunnel2.tunnel_id}}
+delete vsys vsys2 zone z-{{tunnel2.peer_zone}} network layer3 tunnel.{{tunnel2.tunnel_id}}
+delete network virtual-router aws-test-vr interface tunnel.{{tunnel2.tunnel_id}}
+delete network interface tunnel units tunnel.{{tunnel2.tunnel_id}}
+
+#IKE GATEWAY CONFIG
+delete network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2
+
+commit

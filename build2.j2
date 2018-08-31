@@ -1,0 +1,56 @@
+configure
+#IKE GATEWAY CONFIG
+set network ike gateway test-gateway protocol ikev1 ike-crypto-profile aws-ike-profile
+set network ike gateway test-gateway protocol ikev1 exchange-mode main
+set network ike gateway test-gateway protocol ikev1 dpd interval 10
+set network ike gateway test-gateway protocol ikev1 dpd retry 3
+set network ike gateway test-gateway protocol ikev1 dpd enable yes
+set network ike gateway test-gateway protocol ikev2 dpd enable no
+set network ike gateway test-gateway authentication pre-shared-key key Testk3y1234!
+set network ike gateway test-gateway local-address interface ethernet1/1.333
+set network ike gateway test-gateway local-address ip 133.33.33.1/24
+set network ike gateway test-gateway peer-address ip 1.1.1.1
+set network ike gateway test-gateway local-id type ipaddr id 3.3.3.3
+
+#TUNNEL INTERFACE CONFIG
+set network interface tunnel units tunnel.10 ip 169.254.0.2/30
+set network interface tunnel units tunnel.10 mtu 1427
+set network interface tunnel units tunnel.10 comment "*M test-tunnel"
+set network virtual-router aws-test-vr interface tunnel.10
+set vsys vsys2 import network interface tunnel.10
+set vsys vsys2 zone aws-side network layer3 tunnel.10
+
+#IPSEC TUNNEL
+set network tunnel ipsec test-use-case1 auto-key ike-gateway test-gateway
+set network tunnel ipsec test-use-case1 auto-key ipsec-crypto-profile aws-crypto-profile
+set network tunnel ipsec test-use-case1 tunnel-monitor enable yes
+set network tunnel ipsec test-use-case1 tunnel-monitor destination-ip 169.254.0.1
+set network tunnel ipsec test-use-case1 tunnel-monitor tunnel-monitor-profile "tunnel monitor"
+set network tunnel ipsec test-use-case1 tunnel-interface tunnel.10
+
+#BGP NEIGHBOR
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 connection-options incoming-bgp-connection remote-port 0
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 connection-options incoming-bgp-connection allow yes
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 connection-options outgoing-bgp-connection local-port 0
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 connection-options outgoing-bgp-connection allow yes
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 connection-options multihop 0
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 connection-options keep-alive-interval 30
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 connection-options open-delay-time 0
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 connection-options hold-time 90
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 connection-options idle-hold-time 15
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 subsequent-address-family-identifier unicast yes
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 subsequent-address-family-identifier multicast no
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 local-address ip 169.254.0.2/30
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 local-address interface tunnel.10
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 peer-address ip 169.254.0.1
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 bfd profile Inherit-vr-global-setting
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 max-prefixes 5000
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 peer-as 65123
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 enable-mp-bgp no
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 address-family-identifier ipv4
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 enable yes
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 enable-sender-side-loop-detection yes
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 reflector-client non-client
+set network virtual-router aws-test-vr protocol bgp peer-group aws-test-bgp peer bgp-ipsec1 peering-type unspecified
+
+commit

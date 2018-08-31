@@ -1,0 +1,124 @@
+configure
+
+#IKE GATEWAY CONFIG
+set network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1 protocol ikev1 ike-crypto-profile aws-ike-profile
+set network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1 protocol ikev1 exchange-mode main
+set network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1 protocol ikev1 dpd interval 10
+set network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1 protocol ikev1 dpd retry 3
+set network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1 protocol ikev1 dpd enable yes
+set network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1 protocol ikev2 dpd enable no
+set network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1 authentication pre-shared-key key {{tunnel1.tunnel_key}}
+set network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1 local-address interface ethernet1/1.333
+set network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1 local-address ip 133.33.33.1/24
+set network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1 peer-address ip {{tunnel1.peer_ip}}
+set network ike gateway ikeg-{{tunnel1.peer_zone}}-tun1 local-id type ipaddr id 3.3.3.3
+
+#TUNNEL INTERFACE CONFIG
+set network interface tunnel units tunnel.{{tunnel1.tunnel_id}} ip {{tunnel1.tunnel_ip.rsplit('.',1)[0]}}.{{tunnel1.tunnel_ip.split('.')[3] | int + 2 }}/30
+set network interface tunnel units tunnel.{{tunnel1.tunnel_id}} mtu 1427
+set network interface tunnel units tunnel.{{tunnel1.tunnel_id}} comment "*M {{tunnel1.peer_zone}}"
+set network virtual-router aws-test-vr interface tunnel.{{tunnel1.tunnel_id}}
+set vsys vsys2 import network interface tunnel.{{tunnel1.tunnel_id}}
+set vsys vsys2 zone z-{{tunnel1.peer_zone}} network layer3 tunnel.{{tunnel1.tunnel_id}}
+
+#IPSEC TUNNEL
+ edit network tunnel ipsec ipsec-{{tunnel1.peer_zone}}-tun1
+  set auto-key ipsec-crypto-profile aws-crypto-profile
+  set auto-key ike-gateway ikeg-{{tunnel1.peer_zone}}-tun1
+  set tunnel-interface tunnel.{{tunnel1.tunnel_id}}
+  set anti-replay yes
+  set tunnel-monitor destination-ip {{tunnel1.tunnel_ip.rsplit('.',1)[0]}}.{{tunnel1.tunnel_ip.split('.')[3] | int + 1 }}
+  set tunnel-monitor tunnel-monitor-profile "tunnel monitor"
+  set tunnel-monitor enable yes
+ top
+
+#BGP NEIGHBOR
+ edit network virtual-router aws-test-vr protocol bgp
+   edit peer-group aws-test-bgp
+    edit peer bgp-{{tunnel1.peer_zone}}-tun1
+     set peer-as {{tunnel1.peer_as}}
+     set connection-options keep-alive-interval 10
+     set connection-options hold-time 30
+     set enable yes
+     set local-address ip {{tunnel1.tunnel_ip.rsplit('.',1)[0]}}.{{tunnel1.tunnel_ip.split('.')[3] | int + 2 }}/30
+     set local-address interface tunnel.{{tunnel1.tunnel_id}}
+     set peer-address ip {{tunnel1.tunnel_ip.rsplit('.',1)[0]}}.{{tunnel1.tunnel_ip.split('.')[3] | int + 1 }}
+     top
+
+
+#####################################SECONDARY TUNNEL######################################
+
+
+#IKE GATEWAY CONFIG
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 protocol ikev1 ike-crypto-profile aws-ike-profile
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 protocol ikev1 exchange-mode main
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 protocol ikev1 dpd interval 10
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 protocol ikev1 dpd retry 3
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 protocol ikev1 dpd enable yes
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 protocol ikev2 dpd enable no
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 authentication pre-shared-key key {{tunnel2.tunnel_key}}
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 local-address interface ethernet1/1.333
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 local-address ip 133.33.33.1/24
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 peer-address ip {{tunnel2.peer_ip}}
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 local-id type ipaddr id 3.3.3.3
+
+#TUNNEL INTERFACE CONFIG
+set network interface tunnel units tunnel.{{tunnel2.tunnel_id}} ip {{tunnel2.tunnel_ip.rsplit('.',1)[0]}}.{{tunnel2.tunnel_ip.split('.')[3] | int + 2 }}/30
+set network interface tunnel units tunnel.{{tunnel2.tunnel_id}} mtu 1427
+set network interface tunnel units tunnel.{{tunnel2.tunnel_id}} comment "*M {{tunnel2.peer_zone}}"
+set network virtual-router aws-test-vr interface tunnel.{{tunnel2.tunnel_id}}
+set vsys vsys2 import network interface tunnel.{{tunnel2.tunnel_id}}
+set vsys vsys2 zone z-{{tunnel2.peer_zone}} network layer3 tunnel.{{tunnel2.tunnel_id}}
+
+#IPSEC TUNNEL
+ edit network tunnel ipsec ipsec-{{tunnel2.peer_zone}}-tun2
+  set auto-key ipsec-crypto-profile aws-crypto-profile
+  set auto-key ike-gateway ikeg-{{tunnel2.peer_zone}}-tun2
+  set tunnel-interface tunnel.{{tunnel2.tunnel_id}}
+  set anti-replay yes
+  set tunnel-monitor destination-ip {{tunnel2.tunnel_ip.rsplit('.',1)[0]}}.{{tunnel2.tunnel_ip.split('.')[3] | int + 1 }}
+  set tunnel-monitor tunnel-monitor-profile "tunnel monitor"
+  set tunnel-monitor enable yes
+ top
+
+#BGP NEIGHBOR
+ edit network virtual-router aws-test-vr protocol bgp
+   edit peer-group aws-test-bgp
+    edit peer bgp-{{tunnel2.peer_zone}}-tun2
+     set peer-as {{tunnel2.peer_as}}
+     set connection-options keep-alive-interval 10
+     set connection-options hold-time 30
+     set enable yes
+     set local-address ip {{tunnel2.tunnel_ip.rsplit('.',1)[0]}}.{{tunnel2.tunnel_ip.split('.')[3] | int + 2 }}/30
+     set local-address interface tunnel.{{tunnel2.tunnel_id}}
+     set peer-address ip {{tunnel2.tunnel_ip.rsplit('.',1)[0]}}.{{tunnel2.tunnel_ip.split('.')[3] | int + 1 }}
+     top
+
+#####################################ZONE-BASED POLICY######################################
+
+#AWS TO SFDC
+set vsys vsys2 rulebase security rules {{tunnel1.peer_zone}}-sfdc to GW-INT-TRUST
+set vsys vsys2 rulebase security rules {{tunnel1.peer_zone}}-sfdc from z-{{tunnel1.peer_zone}}
+set vsys vsys2 rulebase security rules {{tunnel1.peer_zone}}-sfdc source any
+set vsys vsys2 rulebase security rules {{tunnel1.peer_zone}}-sfdc destination any
+set vsys vsys2 rulebase security rules {{tunnel1.peer_zone}}-sfdc source-user any
+set vsys vsys2 rulebase security rules {{tunnel1.peer_zone}}-sfdc category any
+set vsys vsys2 rulebase security rules {{tunnel1.peer_zone}}-sfdc application any
+set vsys vsys2 rulebase security rules {{tunnel1.peer_zone}}-sfdc service any
+set vsys vsys2 rulebase security rules {{tunnel1.peer_zone}}-sfdc hip-profiles any
+set vsys vsys2 rulebase security rules {{tunnel1.peer_zone}}-sfdc action allow
+
+#SFDC TO AWS
+set vsys vsys2 rulebase security rules sfdc-{{tunnel1.peer_zone}} to z-{{tunnel1.peer_zone}}
+set vsys vsys2 rulebase security rules sfdc-{{tunnel1.peer_zone}} from GW-INT-TRUST
+set vsys vsys2 rulebase security rules sfdc-{{tunnel1.peer_zone}} source any
+set vsys vsys2 rulebase security rules sfdc-{{tunnel1.peer_zone}} destination any
+set vsys vsys2 rulebase security rules sfdc-{{tunnel1.peer_zone}} source-user any
+set vsys vsys2 rulebase security rules sfdc-{{tunnel1.peer_zone}} category any
+set vsys vsys2 rulebase security rules sfdc-{{tunnel1.peer_zone}} application any
+set vsys vsys2 rulebase security rules sfdc-{{tunnel1.peer_zone}} service any
+set vsys vsys2 rulebase security rules sfdc-{{tunnel1.peer_zone}} hip-profiles any
+set vsys vsys2 rulebase security rules sfdc-{{tunnel1.peer_zone}} action allow
+
+
+commit
