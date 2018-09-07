@@ -29,4 +29,4 @@
 1. Merge ASA and PAN script in one  file.
 2. Password handling improvement.
 3. Configlet automatic file parsing for var template.
-# NOTE: username/password would need to be updated before running the script - I removed them since this git resource is public.
+## NOTE: username/password would need to be updated before running the script - creadentials have been ommitted since this git resource is public.
