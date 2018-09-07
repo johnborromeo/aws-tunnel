@@ -81,7 +81,7 @@ set vsys vsys2 zone z-{{tunnel2.peer_zone}} network layer3 tunnel.{{tunnel2.tunn
   set tunnel-monitor enable yes
  top
 
-#BGP NEIGHBOR
+#####################################BGP NEIGHBOR#####################################
  edit network virtual-router aws-test-vr protocol bgp
    edit peer-group aws-test-bgp
     edit peer bgp-{{tunnel2.peer_zone}}-tun2
