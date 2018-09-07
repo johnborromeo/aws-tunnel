@@ -25,7 +25,7 @@
 1. Make sure the accurate var_pan.yml file is saved on your variable file location, or if you wish to rename the file in the case of multiple files.
 2. Run the 'tunnel_decom.py' script and 'asa_decom.py' script using the variable file on step one.
 
-## In-progress enhabcements
+## In-progress enhancements
 1. Merge ASA and PAN script in one  file.
 2. Password handling improvement.
 3. Configlet automatic file parsing for var template.
