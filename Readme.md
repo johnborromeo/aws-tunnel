@@ -22,7 +22,7 @@
 3. Run scripts 'asa_update.py' and 'tunn_create.py' (IP's saved on this script is relevant to the lab)
 
 **Steps - Tunnel Destroy**
-1. Make sure the accurate var_pan.yml file is saved on your variable file location, or if you wish to rename the file in the case of multiple files.
+1. Make sure the accurate var_pan.yml file is saved on your variable file location. If you wish to rename the file in the case of multiple files, the var file on the .py script needs to be updated as well.
 2. Run the 'tunnel_decom.py' script and 'asa_decom.py' script using the variable file on step one.
 
 ## In-progress enhancements
