@@ -1,0 +1,8 @@
+configure terminal
+
+#PUBLIC IP - TUNNEL
+object-group network jb-test-object
+no network-object host {{tunnel1.peer_ip}}
+no network-object host {{tunnel2.peer_ip}}
+
+write
