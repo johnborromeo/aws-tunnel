@@ -3,12 +3,15 @@ from jinja2 import Template
 from netmiko import ConnectHandler
 from pprint import pprint
 
+un = input('Enter your TACACS username: ', )
+pw = input('Enter your TACACS password: ', )
+
 asa = {
     'device_type': 'cisco_asa',
     'ip': '10.1.238.81',
-    'username': 'username',
-    'password': 'pw',
-    'secret': 'pw',
+    'username': un,
+    'password': pw,
+    'secret': pw,
     'port': 22,
     'verbose': True
 }
