@@ -2,6 +2,7 @@ import yaml
 from jinja2 import Template
 from netmiko import ConnectHandler
 from pprint import pprint
+import getpass
 
 
 panun = input('Enter your PAN username: ')
