@@ -2,11 +2,12 @@ import yaml
 from jinja2 import Template
 from netmiko import ConnectHandler
 from pprint import pprint
+import getpass
 
-panun = input('Enter your PAN username: ', )
-panpw = input('Enter your PAN password: ', )
-un = input('Enter your TACACS username: ', )
-pw = input('Enter your TACACS password: ', )
+panun = input('Enter your PAN username: ')
+panpw = getpass.getpass('Enter your PAN password: ')
+un = input('Enter your TACACS username: ' )
+pw = getpass.getpass('Enter your TACACS password: ')
 
 
 #Research on getpass for pw handling... 'from getpass import getpass'
