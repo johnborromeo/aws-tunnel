@@ -3,6 +3,8 @@ from jinja2 import Template
 from netmiko import ConnectHandler
 from pprint import pprint
 
+panun = input('Enter your PAN username: ', )
+panpw = input('Enter your PAN password: ', )
 un = input('Enter your TACACS username: ', )
 pw = input('Enter your TACACS password: ', )
 
@@ -11,8 +13,8 @@ pw = input('Enter your TACACS password: ', )
 pan = {
     'device_type' : 'paloalto_panos',
     'ip':   '10.11.77.152',
-    'username': 'panun',
-    'password': 'panpw',
+    'username': panun,
+    'password': panpw,
     'verbose': True
 }
 
