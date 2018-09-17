@@ -11,8 +11,8 @@ pw = input('Enter your TACACS password: ', )
 pan = {
     'device_type' : 'paloalto_panos',
     'ip':   '10.11.77.152',
-    'username': 'admin',
-    'password': 'Sfdc1853!',
+    'username': 'panun',
+    'password': 'panpw',
     'verbose': True
 }
 
