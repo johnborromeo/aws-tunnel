@@ -19,15 +19,15 @@
   - peer_as       : 65123 (AWS Side Autonomous System Number)
   - peer_zone     : usecase1 (Name of use-case or project)
 
-3. Run scripts 'asa_update.py' and 'tunn_create.py' (IP's saved on this script is relevant to the lab)
+3. Run scripts 'tunn_create.py' (IP's saved on this script is relevant to the lab)
 
 **Steps - Tunnel Destroy**
 1. Make sure the accurate var_pan.yml file is saved on your variable file location. If you wish to rename the file in the case of multiple files, the var file on the .py script needs to be updated as well.
-2. Run the 'tunnel_decom.py' script and 'asa_decom.py' script using the variable file on step one.
+2. Run the 'tunnel_decom.py' script using the variable file on step one.
 
 ## In-progress enhancements
-1. Merge ASA and PAN script in one  file.
-2. Password handling improvement.
-3. Configlet automatic file parsing for var template.
+1. Merge ASA and PAN script in one  file. (DONE)
+2. Password handling improvement. (DONE)
+3. Configlet automatic file parsing for var template. (In-Progress....)
 4. M&A Tunnel builds script
 ## NOTE: username/password would need to be updated before running the script - creadentials have been ommitted since this git resource is public.
