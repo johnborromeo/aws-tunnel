@@ -28,6 +28,7 @@
 ## In-progress enhancements
 1. Merge ASA and PAN script in one  file. (DONE)
 2. Password handling improvement. (DONE)
-3. Configlet automatic file parsing for var template. (In-Progress....)
-4. M&A Tunnel builds script
+3. Specific user commit (DONE)
+4. Configlet automatic file parsing for var template. (In-Progress....)
+5. M&A Tunnel builds script
 ## NOTE: username/password would need to be updated before running the script - creadentials have been ommitted since this git resource is public.
