@@ -5,6 +5,7 @@ tunnel1:
   tunnel_key: Testk3y1234!
   peer_as: 65123
   peer_zone: usecase1
+  pan_user: admin
 
 tunnel2:
   tunnel_id: 20
