@@ -57,8 +57,8 @@ set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 protocol ikev1 dpd retry
 set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 protocol ikev1 dpd enable yes
 set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 protocol ikev2 dpd enable no
 set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 authentication pre-shared-key key {{tunnel2.tunnel_key}}
-set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 local-address interface ethernet1/1.333
-set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 local-address ip 133.33.33.1/24
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 local-address interface ae3.199
+set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 local-address ip 11.100.205.1/29
 set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 peer-address ip {{tunnel2.peer_ip}}
 set network ike gateway ikeg-{{tunnel2.peer_zone}}-tun2 local-id type ipaddr id 3.3.3.3
 
