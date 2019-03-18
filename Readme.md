@@ -1,6 +1,6 @@
 # **Automation Script for AWS Tunnel build**
 **Pre-requisites**
-###*****----*****
+###########
 1. The following python modules would need to be installed for this script:
    - yaml
    - Template from jinja2
